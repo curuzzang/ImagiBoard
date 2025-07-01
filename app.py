@@ -96,7 +96,7 @@ Return ONLY the image description in English that can be used for DALL·E 3.
         st.markdown("### 📝 생성된 영어 프롬프트")
         st.code(st.session_state["dalle_prompt"])
 
-        st.image(st.session_state["image_url"], caption="🎉 생성된 이미지", use_column_width=True)
+        st.image(st.session_state["image_url"], caption="🎉 생성된 이미지", use_container_width=True)
 
         # ✅ 다운로드 버튼도 조건문 안에 포함
         image_data = requests.get(st.session_state["image_url"]).content
