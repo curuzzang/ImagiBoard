@@ -10,6 +10,20 @@ client = OpenAI(api_key=st.secrets["api_key"])  # ✅ 객체 생성
 
 # ...
 # 이후 GPT 호출부:
+instruction = f"""
+You are an assistant that generates an image prompt and creates an image using DALL·E 3.
+User wants to express a theme through visual art.
+Generate a vivid English image prompt based on the user's choices.
+
+Theme: {theme}
+Style: {genre}
+Elements: {elements}
+Color tone: {color_tone}
+Mood: {', '.join(mood)}
+Viewpoint: {viewpoint}
+
+Return ONLY the image description in English that can be used for DALL·E 3.
+"""
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=[{"role": "user", "content": instruction}]
