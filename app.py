@@ -3,44 +3,17 @@ import requests
 from io import BytesIO
 from openai import OpenAI
 
-# 🌐 OpenAI API 키 설정
-client = OpenAI(api_key=st.secrets["api_key"])
-
-# 🛠️ 스타일, 색상, 감정 → 영어 변환 함수
-def translate_to_prompt(style, tone, moods):
-    style_dict = {
-        "수채화": "watercolor", "유화": "oil painting", "카툰": "cartoon", "픽셀 아트": "pixel art",
-        "3D 렌더링": "3D rendering", "사이버펑크": "cyberpunk", "스케치풍": "sketch style",
-        "클림트 스타일": "Klimt-inspired", "큐비즘": "cubism", "리얼리즘": "photorealism",
-        "아르누보": "art nouveau", "낙서풍 (Doodle)": "doodle style"
-    }
-    tone_dict = {
-        "따뜻한 파스텔톤": "warm pastel tones", "선명한 원색": "vivid primary colors",
-        "몽환적 퍼플": "dreamy purples", "차가운 블루": "cool blues", "빈티지 세피아": "vintage sepia",
-        "형광 네온": "neon colors", "모노톤 (흑백)": "monotone (black and white)",
-        "대비 강한 컬러": "high contrast", "브라운 계열": "earthy browns", "연보라+회색": "soft lavender and grey",
-        "다채로운 무지개": "rainbow spectrum", "연한 베이지": "light beige", "청록+골드": "teal and gold"
-    }
-    mood_dict = {
-        "몽환적": "dreamy", "고요함": "serene", "희망": "hopeful", "슬픔": "sadness",
-        "그리움": "nostalgic", "설렘": "excitement", "불안정함": "unstable", "자유로움": "free",
-        "기대감": "anticipation", "공허함": "emptiness", "감사함": "grateful", "외로움": "lonely",
-        "기쁨": "joyful", "어두움": "darkness", "차분함": "calm", "위로": "comfort", "용기": "bravery",
-        "무한함": "infinite", "즐거움": "fun", "강렬함": "intensity"
-    }
-    style_eng = style_dict.get(style, style)
-    tone_eng = tone_dict.get(tone, tone)
-    mood_eng = ', '.join([mood_dict.get(m, m) for m in moods])
-    return style_eng, tone_eng, mood_eng
-
-# 📄 페이지 설정
+# 초기 설정
 st.set_page_config(page_title="나의 그림상자 (Assistant API)", layout="wide")
 st.title("🖼️ 나의 그림상자 - AI와 함께 콜라주 만들기")
 
-# 🔲 좌우 레이아웃
+# OpenAI 클라이언트 객체 생성
+client = OpenAI(api_key=st.secrets["api_key"])
+
+# 좌우 레이아웃 분리
 left_col, right_col = st.columns([1, 2])
 
-# 🎨 입력창
+# 좌측 입력창
 with left_col:
     st.subheader("🎨 원하는 이미지 요청하기")
 
@@ -48,7 +21,7 @@ with left_col:
         theme = st.text_input("🎯 주제", placeholder="예: 꿈속을 걷는 느낌")
         genre = st.selectbox("🖌️ 스타일", [
             "수채화", "유화", "카툰", "픽셀 아트", "3D 렌더링", "사이버펑크", 
-            "스케치풍", "클림트 스타일", "큐비즘", "리얼리즘", "아르누보", "낙서풍 (Doodle)"
+            "스케치풍", "클림트 스타일", "큐비즘", "사진 같은 리얼리즘", "아르누보", "낙서풍 (Doodle)"
         ])
         elements = st.text_input("🌟 포함할 요소들", placeholder="예: 고양이, 우산, 별, 밤하늘")
         color_tone = st.selectbox("🎨 색상 톤", [
@@ -68,18 +41,16 @@ with left_col:
     if prompt_submit:
         with st.spinner("프롬프트 생성 중..."):
             try:
-                style_eng, tone_eng, mood_eng = translate_to_prompt(genre, color_tone, mood)
-
                 instruction = f"""
 You are an assistant that generates an image prompt and creates an image using DALL·E 3.
 User wants to express a theme through visual art. 
 Generate a vivid English image prompt based on the user's choices.
 
 Theme: {theme}
-Style: {style_eng}
+Style: {genre}
 Elements: {elements}
-Color tone: {tone_eng}
-Mood: {mood_eng}
+Color tone: {color_tone}
+Mood: {', '.join(mood)}
 Viewpoint: {viewpoint}
 
 Return ONLY the image description in English that can be used for DALL·E 3.
@@ -94,7 +65,7 @@ Return ONLY the image description in English that can be used for DALL·E 3.
             except Exception as e:
                 st.error(f"❌ 에러: {e}")
 
-# ▶️ 우측 결과 및 이미지
+# 우측 결과 출력창
 with right_col:
     if "dalle_prompt" in st.session_state:
         st.markdown("### 📝 생성된 영어 프롬프트")
