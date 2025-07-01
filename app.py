@@ -84,7 +84,7 @@ left_col, right_col = st.columns([1, 2])
 with left_col:
     st.subheader("🎨 원하는 이미지 요청하기")
 
-    with st.form("prompt_form"):
+    with st.form("image_form"):
         theme = st.text_input("🎯 주제", placeholder="예: 꿈속을 걷는 느낌")
         genre = st.selectbox("🖌️ 스타일", [
             "수채화", "유화", "카툰", "픽셀 아트", "3D 렌더링", "사이버펑크", 
