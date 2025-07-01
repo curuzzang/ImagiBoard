@@ -79,13 +79,13 @@ Return ONLY the image description in English that can be used for DALL·E 3.
                 st.session_state["dalle_prompt"] = dalle_prompt
 
                 # 이미지 생성
-                image_response = client.Image.create(
+                image_response = client.images.generate(
                     model="dall-e-2",
                     prompt=dalle_prompt,
                     size="1024x1024",
                     n=1
                 )
-                image_url = image_response["data"][0]["url"]
+                image_url = image_response.data[0].url
                 st.session_state["image_url"] = image_url
 
             except Exception as e:
