@@ -71,7 +71,7 @@ Viewpoint: {viewpoint}
 Return ONLY the image description in English that can be used for DALL·E 3.
 """
 
-                response = client.ChatCompletion.create(
+                response = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[{"role": "user", "content": instruction}]
                 )
