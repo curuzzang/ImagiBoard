@@ -28,7 +28,7 @@ st.title("🖼️ 나의 그림상자 - AI와 함께 콜라주 만들기")
 left_col, right_col = st.columns([1, 2])
 
 with left_col:
-    st.subheader("🎨 상상력 입력하기")
+    st.subheader("🎨 원하는 이미지 요청하기")
 
     with st.form("prompt_form"):
         theme = st.text_input("🎯 주제", placeholder="예: 꿈속을 걷는 느낌")
@@ -93,7 +93,7 @@ Return ONLY the image description in English that can be used for DALL·E 3.
 
     # 이미지와 프롬프트가 세션에 저장되어 있다면 표시
     if "image_url" in st.session_state and "dalle_prompt" in st.session_state:
-        st.markdown("### 📝 생성된 영어 프롬프트")
+        st.markdown("### 📝 생성된 프롬프트")
         st.code(st.session_state["dalle_prompt"])
 
         st.image(st.session_state["image_url"], caption="🎉 생성된 이미지", use_container_width=True)
