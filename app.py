@@ -1,12 +1,24 @@
 import streamlit as st
-import openai
 import requests
 from io import BytesIO
+from openai import OpenAI  # ✅ 변경된 방식
 
 st.set_page_config(page_title="나의 그림상자 (Assistant API)", layout="wide")
 st.title("🖼️ 나의 그림상자 - AI와 함께 콜라주 만들기")
 
-openai.api_key = st.secrets["api_key"]
+client = OpenAI(api_key=st.secrets["api_key"])  # ✅ 객체 생성
+
+# ...
+# 이후 GPT 호출부:
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": instruction}]
+)
+dalle_prompt = response.choices[0].message.content.strip()
+🔄 대안 1: 이전 버전으로 다운그레이드 (비추천)
+
+st.set_page_config(page_title="나의 그림상자 (Assistant API)", layout="wide")
+st.title("🖼️ 나의 그림상자 - AI와 함께 콜라주 만들기")
 
 left_col, right_col = st.columns([1, 2])
 
