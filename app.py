@@ -75,7 +75,7 @@ Return ONLY the image description in English that can be used for DALL·E 3.
                     model="gpt-4o",
                     messages=[{"role": "user", "content": instruction}]
                 )
-                dalle_prompt = response["choices"][0]["message"]["content"].strip()
+                dalle_prompt = response.choices[0].message.content.strip()
                 st.session_state["dalle_prompt"] = dalle_prompt
 
                 # 이미지 생성
