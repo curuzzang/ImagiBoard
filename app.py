@@ -38,7 +38,7 @@ with left_col:
         ])
         prompt_submit = st.form_submit_button("✨ 프롬프트 생성")
 
-    if prompt_submit:
+     if prompt_submit:
         with st.spinner("프롬프트 생성 중..."):
             try:
                 style_eng, tone_eng, mood_eng = translate_to_prompt(genre, color_tone, mood)
