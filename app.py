@@ -39,11 +39,11 @@ with left_col:
         prompt_submit = st.form_submit_button("✨ 프롬프트 생성")
 
     if prompt_submit:
-    with st.spinner("프롬프트 생성 중..."):
-        try:
-            style_eng, tone_eng, mood_eng = translate_to_prompt(genre, color_tone, mood)
+        with st.spinner("프롬프트 생성 중..."):
+            try:
+                style_eng, tone_eng, mood_eng = translate_to_prompt(genre, color_tone, mood)
 
-            instruction = f"""
+                instruction = f"""
 You are an assistant that generates an image prompt and creates an image using DALL·E 3.
 User wants to express a theme through visual art. 
 Generate a vivid English image prompt based on the user's choices.
@@ -57,15 +57,15 @@ Viewpoint: {viewpoint}
 
 Return ONLY the image description in English that can be used for DALL·E 3.
 """
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[{"role": "user", "content": instruction}]
-            )
-            dalle_prompt = response.choices[0].message.content.strip()
-            st.session_state["dalle_prompt"] = dalle_prompt
-            st.success("✅ 프롬프트 생성 완료!")
-        except Exception as e:
-            st.error(f"❌ 에러: {e}")
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[{"role": "user", "content": instruction}]
+                )
+                dalle_prompt = response.choices[0].message.content.strip()
+                st.session_state["dalle_prompt"] = dalle_prompt
+                st.success("✅ 프롬프트 생성 완료!")
+            except Exception as e:
+                st.error(f"❌ 에러: {e}")
 
 
 # 우측 결과 출력창
