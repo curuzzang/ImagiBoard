@@ -105,10 +105,9 @@ with left_col:
         ])
         submit = st.form_submit_button("✨ 프롬프트 및 이미지 생성")
 
-with right_col:
     if prompt_submit:
-    with st.spinner("프롬프트 생성 중..."):
-        instruction = f"""
+        with st.spinner("프롬프트 생성 중..."):
+            instruction = f"""
 You are an assistant that generates an image prompt and creates an image using DALL·E 3.
 User wants to express a theme through visual art. 
 Generate a vivid English image prompt based on the user's choices.
