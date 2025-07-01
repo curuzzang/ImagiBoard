@@ -71,7 +71,7 @@ Viewpoint: {viewpoint}
 Return ONLY the image description in English that can be used for DALL·E 3.
 """
 
-                response = openai.ChatCompletion.create(
+                response = client.ChatCompletion.create(
                     model="gpt-4o",
                     messages=[{"role": "user", "content": instruction}]
                 )
@@ -79,7 +79,7 @@ Return ONLY the image description in English that can be used for DALL·E 3.
                 st.session_state["dalle_prompt"] = dalle_prompt
 
                 # 이미지 생성
-                image_response = openai.Image.create(
+                image_response = client.Image.create(
                     model="dall-e-2",
                     prompt=dalle_prompt,
                     size="1024x1024",
