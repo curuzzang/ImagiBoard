@@ -21,7 +21,7 @@ with left_col:
         theme = st.text_input("🎯 주제", placeholder="예: 꿈속을 걷는 느낌")
         genre = st.selectbox("🖌️ 스타일", [
             "수채화", "유화", "카툰", "픽셀 아트", "3D 렌더링", "사이버펑크", 
-            "스케치풍", "클림트 스타일", "큐비즘", "사진 같은 리얼리즘", "아르누보", "낙서풍 (Doodle)"
+            "스케치풍", "클림트 스타일", "큐비즘", "리얼리즘", "아르누보", "낙서풍 (Doodle)"
         ])
         elements = st.text_input("🌟 포함할 요소들", placeholder="예: 고양이, 우산, 별, 밤하늘")
         color_tone = st.selectbox("🎨 색상 톤", [
@@ -39,31 +39,34 @@ with left_col:
         prompt_submit = st.form_submit_button("✨ 프롬프트 생성")
 
     if prompt_submit:
-        with st.spinner("프롬프트 생성 중..."):
-            try:
-                instruction = f"""
+    with st.spinner("프롬프트 생성 중..."):
+        try:
+            style_eng, tone_eng, mood_eng = translate_to_prompt(genre, color_tone, mood)
+
+            instruction = f"""
 You are an assistant that generates an image prompt and creates an image using DALL·E 3.
 User wants to express a theme through visual art. 
 Generate a vivid English image prompt based on the user's choices.
 
 Theme: {theme}
-Style: {genre}
+Style: {style_eng}
 Elements: {elements}
-Color tone: {color_tone}
-Mood: {', '.join(mood)}
+Color tone: {tone_eng}
+Mood: {mood_eng}
 Viewpoint: {viewpoint}
 
 Return ONLY the image description in English that can be used for DALL·E 3.
 """
-                response = client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=[{"role": "user", "content": instruction}]
-                )
-                dalle_prompt = response.choices[0].message.content.strip()
-                st.session_state["dalle_prompt"] = dalle_prompt
-                st.success("✅ 프롬프트 생성 완료!")
-            except Exception as e:
-                st.error(f"❌ 에러: {e}")
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": instruction}]
+            )
+            dalle_prompt = response.choices[0].message.content.strip()
+            st.session_state["dalle_prompt"] = dalle_prompt
+            st.success("✅ 프롬프트 생성 완료!")
+        except Exception as e:
+            st.error(f"❌ 에러: {e}")
+
 
 # 우측 결과 출력창
 with right_col:
