@@ -74,22 +74,19 @@ Return ONLY the image description in English that can be used for DALL·E 3.
             except Exception as e:
                 st.error(f"에러: {e}")
 
-# 이미지와 프롬프트가 세션에 저장되어 있다면 표시
+    # 이미지와 프롬프트가 세션에 저장되어 있다면 표시
     if "image_url" in st.session_state and "dalle_prompt" in st.session_state:
         st.markdown("### 📝 생성된 영어 프롬프트")
         st.code(st.session_state["dalle_prompt"])
 
         st.image(st.session_state["image_url"], caption="🎉 생성된 이미지", use_column_width=True)
 
-    # 새 창에서 이미지 열기 버튼
-        st.markdown(f"""
-    """, unsafe_allow_html=True)
+        # ✅ 다운로드 버튼도 조건문 안에 포함
+        image_data = requests.get(st.session_state["image_url"]).content
+        st.download_button(
+            label="📥 이미지 다운로드 (PNG)",
+            data=BytesIO(image_data),
+            file_name="my_art_box_result.png",
+            mime="image/png"
+        )
 
-    # 다운로드 버튼
-    image_data = requests.get(st.session_state["image_url"]).content
-    st.download_button(
-        label="📥 이미지 다운로드 (PNG)",
-        data=BytesIO(image_data),
-        file_name="my_art_box_result.png",
-        mime="image/png"
-    )
